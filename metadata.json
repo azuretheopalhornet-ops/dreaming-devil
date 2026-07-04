@@ -1,0 +1,9 @@
+{
+    "id": "rainbowquartz",
+    "name": "dreaming devil",
+    "author": ["opalhornet"],
+    "description": "just a mod i made",
+    "prefix": "kyubey",
+    "main_file": "main.lua",
+    "version": "0.0.1"
+}
