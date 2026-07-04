@@ -1,20 +1,17 @@
 SMODS.Joker {
     key = 'paracetamol',
     atlas = 'placeholders',
-    pos = {
-        x = 0,
-        y = 0
-    },
+    pos = { x = 0, y = 0 },
+
+    rarity = 2,
+    cost = 4,
+
     config = {
         extra = {
             mult = 15,
             mult_loss = 2
         }
     },
-    rarity = 2,
-    cost = 4,
-
-    blueprint_compat = true,
 
     loc_vars = function(self, info_queue, card)
         return {
@@ -26,25 +23,37 @@ SMODS.Joker {
     end,
 
     calculate = function(self, card, context)
-        -- Give current Mult
+
+        -- main effect
         if context.joker_main then
             return {
                 mult = card.ability.extra.mult
             }
         end
 
-        -- Lose 2 Mult after each scored hand
-        if context.after then
+        -- lose mult per hand
+        if context.after and not context.blueprint then
             card.ability.extra.mult = math.max(0, card.ability.extra.mult - card.ability.extra.mult_loss)
+
             return {
                 message = "-" .. card.ability.extra.mult_loss .. " Mult",
                 colour = G.C.MULT
             }
         end
 
-        -- Reset at end of round
-        if context.end_of_round then
+        -- reset at end of round (FLASH STYLE)
+        if context.end_of_round and not context.blueprint then
+
+            local changed = (card.ability.extra.mult ~= 15)
+
             card.ability.extra.mult = 15
+
+            if changed then
+                return {
+                    message = "RESET!",
+                    colour = G.C.GREEN
+                }
+            end
         end
     end
 }

@@ -6,9 +6,8 @@ SMODS.Joker {
     rarity = 2,
     cost = 5,
 
-    -- FORCE sell value to 3
-    calculate_sell_cost = function(self, card)
-        return 3
+    set_ability = function(self, card)
+        card.sell_cost = 3
     end,
 
     config = {
@@ -32,7 +31,6 @@ SMODS.Joker {
 
     calculate = function(self, card, context)
 
-        -- main effect
         if context.joker_main then
             return {
                 chips = card.ability.extra.chips,
@@ -40,12 +38,10 @@ SMODS.Joker {
             }
         end
 
-        -- reset per round
         if context.setting_blind then
             card.ability.extra.triggered = false
         end
 
-        -- boss reward logic
         if context.end_of_round
         and G.GAME.blind
         and G.GAME.blind.boss
@@ -68,7 +64,6 @@ SMODS.Joker {
                 col = G.C.MULT
             end
 
-            -- mafia message (2 seconds)
             if card.ability.extra.money_counter >= 4 then
                 card.ability.extra.money_counter = 0
 
