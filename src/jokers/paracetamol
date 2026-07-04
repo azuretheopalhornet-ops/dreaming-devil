@@ -1,0 +1,48 @@
+SMODS.Joker {
+    key = 'paracetamol',
+    atlas = 'placeholders',
+    pos = {
+        x = 0,
+        y = 0
+    },
+    config = {
+        extra = {
+            mult = 15,
+            mult_loss = 2
+        }
+    },
+    rarity = 1,
+    cost = 4,
+
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.mult,
+                card.ability.extra.mult_loss
+            }
+        }
+    end,
+
+    calculate = function(self, card, context)
+        -- Give current Mult
+        if context.joker_main then
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
+
+        -- Lose 2 Mult after each scored hand
+        if context.after then
+            card.ability.extra.mult = math.max(0, card.ability.extra.mult - card.ability.extra.mult_loss)
+            return {
+                message = "-" .. card.ability.extra.mult_loss .. " Mult",
+                colour = G.C.MULT
+            }
+        end
+
+        -- Reset at end of round
+        if context.end_of_round then
+            card.ability.extra.mult = 15
+        end
+    end
+}
