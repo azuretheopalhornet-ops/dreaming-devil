@@ -1,90 +1,287 @@
-SMODS.Joker{
-    key = "kin",
-    atlas = "placeholders",
-    pos = {x = 0, y = 0},
+-- ==========================================
+-- 0. CUSTOM COLORS & RARITY REGISTRATION
+-- ==========================================
+-- Define your gorgeous custom colors globally
+G.C.KYUBEY_HOT_PINK = HEX("FF66B2")
+G.C.KYUBEY_GOLDEN_ORANGE = HEX("FFA500")
+G.C.KYUBEY_GOLDEN_YELLOW = HEX("FFD700")
 
-    rarity = 4,
-    cost = 20,
+-- Failsafe: Ensure the Rarity dictionary exists
+G.localization.descriptions.Rarity = G.localization.descriptions.Rarity or {}
 
-    config = { extra = { mult = 12 } },
+SMODS.Rarity {
+    key = "legendary_vip",
+    loc_txt = {
+        name = "Legendary V.I.P."
+    },
+    badge_colour = G.C.KYUBEY_GOLDEN_ORANGE,
+    default_weight = 0 -- Prevents natural shop spawns
+}
 
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.mult } }
+-- ==========================================
+-- 0.5. UI INTERCEPTOR (THE TEXT COLOR FIX)
+-- ==========================================
+-- We intercept Balatro's badge creation to force our custom text color
+local original_create_badge = create_badge
+function create_badge(text, bg_col, text_col, scale)
+    -- If the game is trying to draw our specific rarity badge...
+    if type(text) == 'string' and text == "Legendary V.I.P." then
+        -- Force the text color to our custom Golden Yellow!
+        text_col = G.C.KYUBEY_GOLDEN_YELLOW
+    end
+    -- Proceed with normal badge creation using our modified colors
+    return original_create_badge(text, bg_col, text_col, scale)
+end
+
+-- ==========================================
+-- 1. KIN JOKER (Appears in Shop)
+-- ==========================================
+SMODS.Joker {
+    key = 'kin',
+    atlas = 'placeholders',
+    pos = { x = 0, y = 0 },
+    rarity = 2, -- Uncommon
+    cost = 6,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+
+    -- This adds the Hot Pink "Fusion" tag to the card
+    set_badges = function(self, card, badges)
+        badges[#badges + 1] = create_badge("Fusion", G.C.KYUBEY_HOT_PINK, G.C.WHITE, 1.2)
     end,
-
+    
     calculate = function(self, card, context)
         if context.joker_main then
-            return { mult = card.ability.extra.mult }
+            return {
+                mult_mod = 12,
+                message = '+12 Mult',
+                card = card
+            }
         end
-
-        if context.individual and context.cardarea == G.play and context.other_card then
-            if context.other_card.set_seal then
-                context.other_card:set_seal("Gold", true)
+        
+        if context.before and not context.blueprint then
+            for i = 1, #context.scoring_hand do
+                local played_card = context.scoring_hand[i]
+                if not played_card.set_seal then
+                    played_card:set_seal('Gold', nil, true)
+                end
             end
         end
     end
 }
 
-SMODS.Joker{
-    key = "gin",
-    atlas = "placeholders",
-    pos = {x = 0, y = 0},
+-- ==========================================
+-- 2. GIN JOKER (Appears in Shop)
+-- ==========================================
+SMODS.Joker {
+    key = 'gin',
+    atlas = 'placeholders',
+    pos = { x = 0, y = 0 },
+    rarity = 2, -- Uncommon
+    cost = 6,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
 
-    rarity = 4,
-    cost = 20,
-
-    config = { extra = { chips = 500 } },
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.chips } }
+    -- This adds the Hot Pink "Fusion" tag to the card
+    set_badges = function(self, card, badges)
+        badges[#badges + 1] = create_badge("Fusion", G.C.KYUBEY_HOT_PINK, G.C.WHITE, 1.2)
     end,
-
+    
     calculate = function(self, card, context)
         if context.joker_main then
-            return { chips = card.ability.extra.chips }
+            return {
+                chip_mod = 500,
+                message = '+500 Chips',
+                card = card
+            }
         end
-
-        if context.individual and context.cardarea == G.play and context.other_card then
-            if context.other_card.set_ability then
-                context.other_card:set_ability("m_steel", nil, true)
+        
+        if context.before and not context.blueprint then
+            for i = 1, #context.scoring_hand do
+                context.scoring_hand[i]:set_ability(G.P_CENTERS.m_steel, nil, true)
             end
         end
     end
 }
 
-SMODS.Joker{
-    key = "twisted_sisters",
-    atlas = "placeholders",
-    pos = {x = 0, y = 0},
+-- ==========================================
+-- 3. TWISTED SISTERS (FUSION ONLY)
+-- ==========================================
+SMODS.Joker {
+    key = 'twisted_sisters',
+    atlas = 'placeholders',
+    pos = { x = 1, y = 0 },
+    rarity = "kyubey_legendary_vip", -- Links to the Golden Orange rarity!
+    cost = 12,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
 
-    rarity = 4,
-    cost = 30,
-
-    config = { extra = { xmult = 2 } },
-
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.xmult } }
+    -- Let's give the final fusion card the Hot Pink tag too!
+    set_badges = function(self, card, badges)
+        badges[#badges + 1] = create_badge("Fusion", G.C.KYUBEY_HOT_PINK, G.C.WHITE, 1.2)
     end,
-
+    
+    in_pool = function(self, args)
+        return false, {allow_duplicates = false}
+    end,
+    
     calculate = function(self, card, context)
-        if context.joker_main then
-            return { x_mult = card.ability.extra.xmult }
+        if context.individual and context.cardarea == G.play then
+            local target_card = context.other_card
+            local is_steel = target_card.config.center == G.P_CENTERS.m_steel
+            local has_gold_seal = target_card.seal == 'Gold'
+            
+            if is_steel and has_gold_seal then
+                return {
+                    mult = 5,
+                    card = card
+                }
+            end
         end
 
-        if context.individual and context.cardarea == G.play and context.other_card then
-            if context.other_card.set_seal then
-                context.other_card:set_seal("Gold", true)
-            end
-            if context.other_card.set_ability then
-                context.other_card:set_ability("m_steel", nil, true)
+        if context.joker_main then
+            return {
+                Xmult_mod = 3,
+                message = 'X3 Mult!',
+                card = card
+            }
+        end
+        
+        if context.before and not context.blueprint then
+            for i = 1, #context.scoring_hand do
+                local played_card = context.scoring_hand[i]
+                played_card:set_ability(G.P_CENTERS.m_steel, nil, true)
+                played_card:set_seal('Gold', nil, true)
             end
         end
     end
 }
 
-FusionJokers.fusions:add_fusion(
-    "j_kin", nil, false,
-    "j_gin", nil, false,
-    "j_twisted_sisters",
-    25
-)
+-- ==========================================
+-- 4. GRAND HOLY FUSION SYSTEM
+-- ==========================================
+
+local function locate_sisters()
+    if not G.jokers or not G.jokers.cards then return nil, nil end
+    local kin_card, gin_card = nil, nil
+    for _, c in ipairs(G.jokers.cards) do
+        if c.config.center.key and c.config.center.key:match('kin') then kin_card = c end
+        if c.config.center.key and c.config.center.key:match('gin') then gin_card = c end
+    end
+    return kin_card, gin_card
+end
+
+local original_sell_card = G.FUNCS.sell_card
+G.FUNCS.sell_card = function(e)
+    local card = e.config.ref_table
+    if card and card.config and card.config.center and card.config.center.key then
+        local key = card.config.center.key
+        if key:match('kin') or key:match('gin') then
+            local kin, gin = locate_sisters()
+            
+            if kin and gin then
+                kin.T.w = kin.T.w * 0.50
+                kin.T.h = kin.T.h * 0.50
+                gin.T.w = gin.T.w * 0.50
+                gin.T.h = gin.T.h * 0.50
+                
+                kin:juice_up(0.4, 0.5)
+                gin:juice_up(0.4, 0.5)
+                
+                play_sound('tarot2', 0.7, 0.8)
+
+                kin.states.drag.is = true
+                gin.states.drag.is = true
+
+                local center_x = (kin.T.x + gin.T.x) / 2
+                local center_y = (kin.T.y + gin.T.y) / 2
+                
+                local steps = 15
+                for i = 1, steps do
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'after',
+                        delay = 0.02,
+                        func = function()
+                            kin.T.x = kin.T.x + (center_x - kin.T.x) * 0.25
+                            kin.T.y = kin.T.y + (center_y - kin.T.y) * 0.25
+                            gin.T.x = gin.T.x + (center_x - gin.T.x) * 0.25
+                            gin.T.y = gin.T.y + (center_y - gin.T.y) * 0.25
+                            
+                            kin.T.r = kin.T.r + 0.04
+                            gin.T.r = gin.T.r - 0.04
+                            return true
+                        end
+                    }))
+                end
+
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.35,
+                    func = function()
+                        play_sound('tarot1', 0.8, 0.85)
+                        
+                        attention_text({
+                            text = " ",
+                            scale = 2.5,
+                            hold = 0.7,
+                            align = 'cm',
+                            offset = {x = 0, y = -0.2},
+                            nodes = {kin},
+                            colour = G.C.PURPLE
+                        })
+                        
+                        kin:start_dissolve()
+                        gin:start_dissolve()
+                        return true
+                    end
+                }))
+                
+                local fusion_key = nil
+                for k, _ in pairs(G.P_CENTERS) do
+                    if k:match('twisted_sisters') then
+                        fusion_key = k
+                        break
+                    end
+                end
+                
+                if fusion_key then
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'after',
+                        delay = 0.5,
+                        func = function()
+                            local fused_joker = create_card('Joker', G.jokers, nil, nil, nil, nil, fusion_key, nil)
+
+                            fused_joker.T.x = center_x
+                            fused_joker.T.y = center_y
+                            
+                            fused_joker.states.drag.is = true
+                            
+                            fused_joker:add_to_deck()
+                            G.jokers:emplace(fused_joker)
+                            
+                            fused_joker:juice_up(1.4, 0.6)
+                            play_sound('gong', 0.7, 0.8)
+                            
+                            G.E_MANAGER:add_event(Event({
+                                trigger = 'after',
+                                delay = 1.2,
+                                func = function()
+                                    fused_joker.states.drag.is = false
+                                    return true
+                                end
+                            }))
+                            
+                            return true
+                        end
+                    }))
+                end
+                return 
+            end
+        end
+    end
+    
+    original_sell_card(e)
+end

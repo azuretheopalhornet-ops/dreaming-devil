@@ -32,29 +32,38 @@ return {
                     'Also your mail will arrive in 7 blinds'
                 }
             },
-            j_kin = {
+            j_kyubey_kin = {
                 name = "Kin",
                 text = {
-                    "Played cards gain {C:attention}Gold Seals{}",
-                    "Gives {C:mult}+#1#{} Mult"
+                    "{C:mult}+12{} Mult.",
+                    "Gives {C:attention}Gold Seals{} to all",
+                    "cards scored in played hand."
                 }
             },
-
-            j_gin = {
+            j_kyubey_gin = {
                 name = "Gin",
                 text = {
-                    "Played cards become {C:attention}Steel{}",
-                    "Gives {C:chips}+#1#{} Chips"
+                    "{C:chips}+500{} Chips.",
+                    "Turns all cards scored in",
+                    "played hand into {C:attention}Steel Cards{}."
                 }
             },
-
-            j_twisted_sisters = {
+            j_kyubey_twisted_sisters = {
                 name = "Twisted Sisters",
                 text = {
-                    "Played cards become {C:attention}Steel + Gold Seal{}",
-                    "Each gives {C:mult}X2{} Mult"
+                    "{X:mult,C:white}X3{} Mult.",
+                    "Turns scored cards into {C:attention}Steel Cards{}",
+                    "with a {C:attention}Gold Seal{}.",
+                    "Scored {C:attention}Steel Cards{} with a {C:attention}Gold Seal{}",
+                    "give {C:mult}+3{} Mult when scored."
                 }
             }
         }
+    },
+    misc = {
+        dictionary = {
+            k_fuse = "FUSE",
+            k_cannot_fuse = "NEED BOTH"
+        }
     }
-}
+        }
