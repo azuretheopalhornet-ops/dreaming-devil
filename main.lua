@@ -55,13 +55,4 @@ G.FUNCS.kyubey_fuse_jokers = function(e)
     end
 end
 
--- Add this once in your main code
-local original_sell_card = G.FUNCS.sell_card
-G.FUNCS.sell_card = function(e)
-    -- Set the flag so the Jokers know a card was sold
-    G.GAME.my_buff_ready = true
-    
-    -- Call the original function so the card actually gets sold
-    original_sell_card(e)
-end
 --#endregion
