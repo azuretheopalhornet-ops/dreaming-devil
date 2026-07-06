@@ -29,7 +29,7 @@ SMODS.Joker {
 }
 
 -- ====================================================================
--- YANG JOKER
+-- YANG JOKER (FIXED)
 -- ====================================================================
 SMODS.Joker {
     key = 'yang',
@@ -51,12 +51,19 @@ SMODS.Joker {
         badges[#badges + 1] = create_badge("Fusion", G.C.KYUBEY_HOT_PINK, G.C.WHITE, 1.2)
     end,
 
+    -- Safely modifies round discards with fallback protections
     add_to_deck = function(self, card, from_debuff)
-        G.GAME.discards = G.GAME.discards + 2
+        if G.GAME and G.GAME.round_resets then
+            G.GAME.round_resets.discards = (G.GAME.round_resets.discards or 0) + 2
+            G.GAME.current_round.discards = (G.GAME.current_round.discards or 0) + 2
+        end
     end,
 
     remove_from_deck = function(self, card, from_debuff)
-        G.GAME.discards = G.GAME.discards - 2
+        if G.GAME and G.GAME.round_resets then
+            G.GAME.round_resets.discards = math.max(0, (G.GAME.round_resets.discards or 2) - 2)
+            G.GAME.current_round.discards = math.max(0, (G.GAME.current_round.discards or 2) - 2)
+        end
     end,
 
     calculate = function(self, card, context)

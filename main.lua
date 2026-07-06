@@ -87,10 +87,15 @@ G.FUNCS.kyubey_fuse_jokers = function(e)
 end
 
 -- ====================================================================
--- RARE SPAWN OVERRIDE (Includes Kin, Gin, Yin, and Yang)
+-- POOL SPAWN OVERRIDE (Jokers and Boosters)
 -- ====================================================================
 local native_get_current_pool = get_current_pool
 function get_current_pool(_type, _rarity, _legendary, _append)
+    -- FIXED: Changed 'p_kyubey_yardsale' to 'p_rainbowquartz_yardsale' to match Mod ID registration
+    if _type == 'Booster' then
+        return {'p_rainbowquartz_yardsale'}, 'booster_debug_pool'
+    end
+
     -- 0.02 means a 2% chance per slot. Change to 0.05 for 5%, 0.10 for 10%, etc.
     if _type == 'Joker' and not _legendary and math.random() < 0.02 then
         local target_pool = {
