@@ -6,6 +6,8 @@ SMODS.Booster {
     group_key = 'k_kyubey_packs',
     weight = 1, 
     kind = 'Item',
+    atlas = 'placeholders', 
+    pos = { x = 0, y = 0 },
     
     loc_txt = {
         name = "Yard Sale",
@@ -13,7 +15,9 @@ SMODS.Booster {
     },
 
     create_card = function(self, card, i)
-        return { set = 'Item', area = G.consumeables, skip_materialize = true, soulable = true, key_append = 'yardsalegen' }
+        -- FIXED: Removed 'area = G.consumeables'. SMODS will now spawn this inside 
+        -- the pack container so you can click the card to hold or use it normally.
+        return { set = 'Item', skip_materialize = true, soulable = true }
     end,
 
     loc_vars = function(self, info_queue, card)
@@ -32,6 +36,8 @@ SMODS.Booster {
     group_key = 'k_kyubey_packs',
     weight = 0.5, 
     kind = 'Item',
+    atlas = 'placeholders',
+    pos = { x = 0, y = 0 },
     
     loc_txt = {
         name = "Mall Sale",
@@ -39,7 +45,7 @@ SMODS.Booster {
     },
 
     create_card = function(self, card, i)
-        return { set = 'Item', area = G.consumeables, skip_materialize = true, soulable = true, key_append = 'mallsalegen' }
+        return { set = 'Item', skip_materialize = true, soulable = true }
     end,
 
     loc_vars = function(self, info_queue, card)

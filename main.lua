@@ -50,9 +50,7 @@ end
 
 --#region Fusion Click Handlers
 
--- Handles the actual fusion event when the player clicks the pink "FUSE" button
 G.FUNCS.kyubey_fuse_jokers = function(e)
-    -- Safety check: Make sure player still has both cards before running
     if not G.jokers or not G.jokers.cards then return end
     
     local card_kin, card_gin
@@ -62,23 +60,19 @@ G.FUNCS.kyubey_fuse_jokers = function(e)
     end
     
     if card_kin and card_gin then
-        -- Visual squish/juice effect on the source cards
         card_kin:juice_up(0.5, 0.5)
         card_gin:juice_up(0.5, 0.5)
         
-        -- Delete the material cards from the player's Joker area
         G.jokers:remove_card(card_kin)
         card_kin:remove()
         G.jokers:remove_card(card_gin)
         card_gin:remove()
         
-        -- Create, spawn, and slot in Twisted Sisters
         local fused_card = create_card('Joker', G.jokers, nil, nil, nil, nil, 'j_kyubey_twisted_sisters', nil)
         fused_card:add_to_deck()
         G.jokers:emplace(fused_card)
         fused_card:juice_up(0.8, 0.8)
         
-        -- Cleanly close the selection context overlay window
         if G.el and G.el.context_menu then 
             G.el.context_menu:remove()
             G.el.context_menu = nil
@@ -91,12 +85,16 @@ end
 -- ====================================================================
 local native_get_current_pool = get_current_pool
 function get_current_pool(_type, _rarity, _legendary, _append)
-    -- FIXED: Changed 'p_kyubey_yardsale' to 'p_rainbowquartz_yardsale' to match Mod ID registration
-    if _type == 'Booster' then
-        return {'p_rainbowquartz_yardsale'}, 'booster_debug_pool'
+    -- FIXED: Dynamically injects UI header text to permanently fix the "ERROR" layout box
+    if G.localization and G.localization.misc and G.localization.misc.dictionary then
+        G.localization.misc.dictionary.k_Item = "Item Pack"
+        G.localization.misc.dictionary.k_Item_pack = "Item Pack"
     end
 
-    -- 0.02 means a 2% chance per slot. Change to 0.05 for 5%, 0.10 for 10%, etc.
+    if _type == 'Booster' then
+        return {'p_kyubey_yardsale'}, 'booster_debug_pool'
+    end
+
     if _type == 'Joker' and not _legendary and math.random() < 0.02 then
         local target_pool = {
             'j_kyubey_kin', 

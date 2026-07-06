@@ -2,7 +2,7 @@ SMODS.Consumable {
     key = 'three_d_glasses',
     set = 'Item',
     atlas = 'placeholders',
-    pos = { x = 0, y = 1 }, 
+    pos = { x = 0, y = 0 }, -- Set to your placeholder coordinates
     cost = 4,
     unlocked = true,
     discovered = true,
@@ -12,6 +12,7 @@ SMODS.Consumable {
         text = { "Flips a selected reality-shifting", "Joker to its alternate form." }
     },
     
+    -- NOTE: You must click/highlight a reality joker on your board to make the "USE" button appear!
     can_use = function(self, card)
         if G.jokers and G.jokers.highlighted and #G.jokers.highlighted == 1 then
             local target = G.jokers.highlighted[1]
