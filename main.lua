@@ -66,4 +66,15 @@ G.FUNCS.kyubey_fuse_jokers = function(e)
     end
 end
 
+-- ====================================================================
+-- TEMPORARY DEBUGGING OVERRIDE (Put at the bottom of main.lua)
+-- ====================================================================
+local native_get_current_pool = get_current_pool
+function get_current_pool(_type, _rarity, _legendary, _append)
+    if _type == 'Joker' then
+        return {'j_kyubey_kin'}, 'joker_debug_pool'
+    end
+    return native_get_current_pool(_type, _rarity, _legendary, _append)
+end
+
 --#endregion

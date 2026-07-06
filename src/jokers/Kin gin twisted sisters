@@ -38,11 +38,13 @@ SMODS.Joker {
     key = 'kin',
     atlas = 'placeholders',
     pos = { x = 0, y = 0 },
-    rarity = 2,
+    rarity = 4,
     cost = 6,
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
+
+    in_pool = function(self) return true end,
 
     set_badges = function(self, card, badges)
         badges[#badges + 1] = create_badge("Fusion", G.C.KYUBEY_HOT_PINK, G.C.WHITE, 1.2)
@@ -53,10 +55,8 @@ SMODS.Joker {
             return { mult_mod = 12, message = '+12 Mult', card = card }
         end
 
-        -- Only run when the hand is being scored
         if context.before and not context.blueprint then
             for _, played_card in ipairs(context.scoring_hand) do
-                -- Only apply if it doesn't already have a Gold seal
                 if played_card.seal ~= 'Gold' then
                     played_card:set_seal('Gold', true)
                 end
@@ -69,12 +69,14 @@ SMODS.Joker {
     key = 'gin',
     atlas = 'placeholders',
     pos = { x = 0, y = 0 },
-    rarity = 2,
+    rarity = 4,
     cost = 6,
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
 
+    in_pool = function(self) return true end,
+    
     set_badges = function(self, card, badges)
         badges[#badges + 1] = create_badge("Fusion", G.C.KYUBEY_HOT_PINK, G.C.WHITE, 1.2)
     end,
@@ -84,11 +86,8 @@ SMODS.Joker {
             return { chip_mod = 500, message = '+500 Chips', card = card }
         end
         
-        -- Only run when the hand is being scored
         if context.before and not context.blueprint then
             for _, played_card in ipairs(context.scoring_hand) do
-                -- Check if the card is already Steel (key 'm_steel')
-                -- If not, apply Steel
                 if played_card.config.center.key ~= 'm_steel' then
                     played_card:set_ability(G.P_CENTERS.m_steel, nil, true)
                 end
