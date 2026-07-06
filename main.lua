@@ -67,12 +67,17 @@ G.FUNCS.kyubey_fuse_jokers = function(e)
 end
 
 -- ====================================================================
--- TEMPORARY DEBUGGING OVERRIDE (Put at the bottom of main.lua)
+-- RARE SPAWN OVERRIDE (Put at the bottom of main.lua)
 -- ====================================================================
 local native_get_current_pool = get_current_pool
 function get_current_pool(_type, _rarity, _legendary, _append)
-    if _type == 'Joker' then
-        return {'j_kyubey_kin'}, 'joker_debug_pool'
+    -- 0.02 means a 2% chance per slot. Change to 0.05 for 5%, 0.10 for 10%, etc.
+    if _type == 'Joker' and not _legendary and math.random() < 0.02 then
+        if math.random() < 0.5 then
+            return {'j_kyubey_kin'}, 'joker_rare_pool'
+        else
+            return {'j_kyubey_gin'}, 'joker_rare_pool'
+        end
     end
     return native_get_current_pool(_type, _rarity, _legendary, _append)
 end
