@@ -9,6 +9,26 @@ SMODS.Atlas {
 
 --#endregion
 
+--#region Custom Types
+
+local mint_green = {0.45, 0.88, 0.68, 1.0}
+
+SMODS.ConsumableType {
+    key = 'Item',
+    primary_colour = mint_green,
+    secondary_colour = {1.0, 1.0, 1.0, 1.0}, -- White text
+    loc_txt = {
+        name = "Item",
+        collection = "Item Cards",
+        undiscovered = {
+            name = "Undiscovered Item",
+            text = { "Buy a pack at a sale", "to discover this item!" }
+        }
+    }
+}
+
+--#endregion
+
 --#region File Loading
 
 local jokers_src = SMODS.NFS.getDirectoryItems(SMODS.current_mod.path .. "src/jokers")
@@ -67,17 +87,20 @@ G.FUNCS.kyubey_fuse_jokers = function(e)
 end
 
 -- ====================================================================
--- RARE SPAWN OVERRIDE (Put at the bottom of main.lua)
+-- RARE SPAWN OVERRIDE (Includes Kin, Gin, Yin, and Yang)
 -- ====================================================================
 local native_get_current_pool = get_current_pool
 function get_current_pool(_type, _rarity, _legendary, _append)
     -- 0.02 means a 2% chance per slot. Change to 0.05 for 5%, 0.10 for 10%, etc.
     if _type == 'Joker' and not _legendary and math.random() < 0.02 then
-        if math.random() < 0.5 then
-            return {'j_kyubey_kin'}, 'joker_rare_pool'
-        else
-            return {'j_kyubey_gin'}, 'joker_rare_pool'
-        end
+        local target_pool = {
+            'j_kyubey_kin', 
+            'j_kyubey_gin', 
+            'j_kyubey_yin', 
+            'j_kyubey_yang'
+        }
+        local chosen_joker = target_pool[math.random(1, #target_pool)]
+        return {chosen_joker}, 'joker_rare_pool'
     end
     return native_get_current_pool(_type, _rarity, _legendary, _append)
 end
