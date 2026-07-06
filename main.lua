@@ -85,10 +85,12 @@ end
 -- ====================================================================
 local native_get_current_pool = get_current_pool
 function get_current_pool(_type, _rarity, _legendary, _append)
-    -- FIXED: Dynamically injects UI header text to permanently fix the "ERROR" layout box
+    -- FIXED: Injects every case configuration variant to wipe out the "ERROR" UI label text
     if G.localization and G.localization.misc and G.localization.misc.dictionary then
-        G.localization.misc.dictionary.k_Item = "Item Pack"
+        G.localization.misc.dictionary.k_item_pack = "Item Pack"
         G.localization.misc.dictionary.k_Item_pack = "Item Pack"
+        G.localization.misc.dictionary.k_item = "Item Pack"
+        G.localization.misc.dictionary.k_Item = "Item Pack"
     end
 
     if _type == 'Booster' then

@@ -14,10 +14,9 @@ SMODS.Booster {
         text = { "Choose {1} of up to", "{2} hidden Items" }
     },
 
+    -- FIXED: Now properly instantiates a real Card object inside the pack selection grid
     create_card = function(self, card, i)
-        -- FIXED: Removed 'area = G.consumeables'. SMODS will now spawn this inside 
-        -- the pack container so you can click the card to hold or use it normally.
-        return { set = 'Item', skip_materialize = true, soulable = true }
+        return create_card('Item', G.pack_cards, nil, nil, nil, nil, nil, nil)
     end,
 
     loc_vars = function(self, info_queue, card)
@@ -45,7 +44,7 @@ SMODS.Booster {
     },
 
     create_card = function(self, card, i)
-        return { set = 'Item', skip_materialize = true, soulable = true }
+        return create_card('Item', G.pack_cards, nil, nil, nil, nil, nil, nil)
     end,
 
     loc_vars = function(self, info_queue, card)
