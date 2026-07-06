@@ -23,7 +23,7 @@ SMODS.ConsumableType {
     key = 'Item',
     primary_colour = mint_green,
     secondary_colour = {1.0, 1.0, 1.0, 1.0},
-    shop_rate = 0.0, -- Set to 0.0 so they only spawn in your Mall tab!
+    shop_rate = 0.0,
     loc_txt = {
         name = "Item",
         collection = "Item Cards",
@@ -113,12 +113,12 @@ end
 
 G.FUNCS.set_shop_tab_standard = function(e)
     G.active_shop_tab = "standard"
-    if G.shop then G.shop:create_UIBox() end
+    G.FUNCS.reroll_shop()
 end
 
 G.FUNCS.set_shop_tab_mall = function(e)
     G.active_shop_tab = "mall"
-    if G.shop then G.shop:create_UIBox() end
+    G.FUNCS.reroll_shop()
 end
 
 G.FUNCS.reroll_mall_shop = function(e)
@@ -134,13 +134,12 @@ G.FUNCS.reroll_mall_shop = function(e)
         end
         
         fill_mall_shop()
-        if G.shop then G.shop:create_UIBox() end
+        G.FUNCS.reroll_shop()
     else
         play_sound('cancel')
     end
 end
 
--- FIXED: Completely overhauled layout generation to safely bind the row array fields 
 local original_create_UIBox_shop = create_UIBox_shop
 function create_UIBox_shop()
     local navigation_bar = {
@@ -158,7 +157,6 @@ function create_UIBox_shop()
 
     if G.active_shop_tab == "standard" then
         local base_ui = original_create_UIBox_shop()
-        -- Safely search and inject navigation directly into the master UI root container
         if base_ui and base_ui.nodes and base_ui.nodes[1] and base_ui.nodes[1].nodes then
             table.insert(base_ui.nodes[1].nodes, 1, navigation_bar)
         end
