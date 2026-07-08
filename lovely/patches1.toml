@@ -1,0 +1,16 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Add create_shop_booster context
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''
+create_shop_card_ui(card, 'Booster', G.shop_booster)
+'''
+position = 'before'
+payload = '''
+SMODS.calculate_context({create_shop_booster = true, booster = card})
+'''
+match_indent = true
