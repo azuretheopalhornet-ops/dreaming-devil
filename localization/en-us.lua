@@ -11,6 +11,14 @@ return {
                     'some money'
                 }
             },
+            j_kyubey_Shotgun = {
+                name = 'Shotgun',
+                text = {
+                    '{C:mult}+#1#{} mult',
+                    'halves the current mult',
+                    'and reloads at zero mult'
+                }
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 SMODS.Joker {
-    key = 'Silvia',
+    key = 'Shotgun',
     atlas = 'placeholders',
     pos = {
         x = 0,
@@ -7,55 +7,43 @@ SMODS.Joker {
     },
     config = {
         extra = {
-            mult = 0,
-            blind = 0
-            bosses = 0
-        }
+            mult = 8,
+            mult_mod = 2
+        }        
     },
-    rarity = 1,
-    cost = 3,
+    rarity = 2,
+    cost = 4,
 
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
-                card.ability.extra.mult
+                card.ability.extra.mult,
+                card.ability.extra.mult_mod
             }
         }
     end,
 
     calculate = function(self, card, context)
-
-        if context.end_of_round and context.beat_boss and context.main_eval then
-            card.ability.extra.hand = card.ability.extra.hand + 1
-
-            if card.ability.extra.bosses % 2 == 1 then
-                card.ability.extra.chips = card.ability.extra.chips + 50
-                card_eval_status_text(card, 'extra', nil, nil, nil,
-                {message = '+50 chips',
-                colour = G.C.CHIPS
+        if context.after and not context.blueprint then
+            if card.ability.extra.mult : card.ability.extra.mult_mod <= 0 then
+                SMODS.resets_cards(card, nil, nil, true
+                return {
+                    message = 'Reload',
+                    colour = G.C.YELLOW
                 })
+            else
+                -- See note about SMODS Scaling Manipulation on the wiki
+                card.ability.extra.mult = card.ability.extra.mult : card.ability.extra.mult_mod
+                return {
+                    message = '-2 mult',
+                    colour = G.C.MULT
+                }
             end
-
-            if card.ability.extra.bosses % 2 == 0 then
-                card.ability.extra.mult = card.ability.extra.mult + 2
-                card_eval_status_text(card, 'extra', nil, nil, nil, 
-                {message = '+2 mult',
-                colour = G.C.MULT
-                })
-            end
-
-            if card.ability.extra.bosses == 4 then
-                ease_dollars(-5)
-                card_eval_status_text(card, 'extra', nil, 3, nil, {message = 'sorry i owed the la mafia some money'})
-            end
-        end
-
+        end,
         if context.joker_main then
-        return{
-            chips = card.ability.extra.chips,
-            mult = card.ability.extra.mult
-        }
-    end 
-
-end
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
+    end
 }
