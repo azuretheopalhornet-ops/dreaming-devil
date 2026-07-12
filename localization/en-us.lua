@@ -19,12 +19,12 @@ return {
                     'and reloads at zero mult'
                 }
             },
-            j_kyubey_shit_a_one = {
+            j_kyubey_one = {
                 name = 'Shit a 1',
                 text = {
                     "Doubles all {C:attention}listed",
                     "{C:pink,E:1,S:1.1}probabilities",
-                    "{C:inactive}(ex: {C:pink}1 in 3{C:inactive} -> {C:pink}1 in 6{C:inactive})",
+                    "{C:inactive}(ex: {C:purple}1 in 3{C:inactive} -> {C:purple}1 in 6{C:inactive})",
                 }
             }
         }
