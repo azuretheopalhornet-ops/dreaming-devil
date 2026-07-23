@@ -1,5 +1,6 @@
+print("Loading Whisper")
+
 SMODS.Joker {
-    print("Loading Whisper")
     key = 'Whisper',
     atlas = 'placeholders',
     pos = {
