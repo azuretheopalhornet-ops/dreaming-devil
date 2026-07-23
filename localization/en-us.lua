@@ -26,6 +26,14 @@ return {
                     "{C:pink,E:1,S:1.1}denominators",
                     "{C:inactive}(ex: {C:purple}1 in 3{C:inactive} -> {C:purple}1 in 6{C:inactive})",
                 }
+            },
+            j_kyubey_Whisper = {
+                name = 'Whisper',
+                text = {
+                    "Gives {C:chips}+#1#{} chips",
+                    "and deducts {C:Orange}1${}",
+                    "from reroll"
+                }
             }
         }
     }
