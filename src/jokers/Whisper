@@ -2,7 +2,7 @@ SMODS.Joker {
     key = 'Whisper',
     atlas = 'placeholders',
     pos = {
-        x = 1,
+        x = 4,
         y = 0
     },
     config = {
