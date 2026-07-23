@@ -2,7 +2,7 @@ SMODS.Joker {
     key = 'one',
     atlas = 'placeholders',
     pos = {
-        x = 3,
+        x = 4,
         y = 0
     },
     blueprint_compat = false,
