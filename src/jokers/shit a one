@@ -4,10 +4,7 @@ SMODS.Joker {
     blueprint_compat = false,
     rarity = 2,
     cost = 4,
-    pos = {
-        x = 4,
-        y = 0
-    },
+    pos = { x = 3, y = 0 },
     calculate = function(self, card, context)
         if context.mod_probability and not context.blueprint then
             return {
