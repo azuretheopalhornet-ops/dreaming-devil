@@ -5,7 +5,7 @@ SMODS.Joker {
     rarity = 2,
     cost = 4,
     pos = {
-        x = 2,
+        x = 1,
         y = 0
     },
     calculate = function(self, card, context)

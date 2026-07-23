@@ -31,8 +31,8 @@ return {
                 name = 'Whisper',
                 text = {
                     "Gives {C:chips}+#1#{} chips",
-                    "and deducts {C:Orange}1${}",
-                    "from reroll"
+                    "and deducts {C:attention}#2#${}",
+                    "from {C:green}reroll{}"
                 }
             }
         }
