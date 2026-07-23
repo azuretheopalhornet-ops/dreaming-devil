@@ -27,7 +27,7 @@ SMODS.Joker {
     calculate = function(self, card, context)
 
         if context.end_of_round and context.beat_boss and context.main_eval then
-            card.ability.extra.bosses = card.ability.extra.bosses + 1
+            card.ability.extra.hand = card.ability.extra.hand + 1
 
             if card.ability.extra.bosses % 2 == 1 then
                 card.ability.extra.chips = card.ability.extra.chips + 50
