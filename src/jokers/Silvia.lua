@@ -46,7 +46,7 @@ SMODS.Joker {
             end
 
             if card.ability.extra.bosses == 4 then
-                ease_dollars(-5)
+                ease_dollars(-10)
                 card_eval_status_text(card, 'extra', nil, 3, nil, {message = 'sorry i owed the la mafia some money'})
             end
         end

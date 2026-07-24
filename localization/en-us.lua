@@ -30,7 +30,7 @@ return {
             j_kyubey_Whisper = {
                 name = 'Whisper',
                 text = {
-                    "Gives {C:chips}+#1#{} chips",
+                    "Gives {C:chips}#1#{} Xchips",
                     "and deducts {C:attention}#2#${}",
                     "from {C:green}reroll{}"
                 }
