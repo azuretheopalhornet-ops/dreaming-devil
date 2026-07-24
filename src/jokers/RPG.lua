@@ -2,7 +2,7 @@ SMODS.Joker {
     key = 'RPG',
     atlas = 'placeholders',
     pos = {
-        x = 0,
+        x = 4,
         y = 0
     },
 
@@ -148,7 +148,7 @@ SMODS.Joker {
             card.ability.extra.form = 0
 
             card.children.center:set_sprite_pos({
-                x = 0,
+                x = 4,
                 y = 0
             })
 
